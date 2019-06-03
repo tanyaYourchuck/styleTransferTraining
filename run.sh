@@ -3,6 +3,8 @@
 export PYTHONUNBUFFERED=0
 python style.py --style images/Van-Gogh-Starry-Night.jpg \
   --checkpoint-dir checkpoints/ \
+  --vgg-path /styletransfer/data/imagenet-vgg-verydeep-19.mat \
+  --train-path /datasets/coco/ \
   --model-dir models/ \
   --test images/violetaparra.jpg \
   --test-dir tests/ \
