@@ -3,16 +3,14 @@
 This repository contains a slightly modified version of [Fast Style Transfer in TensorFlow](https://github.com/lengstrom/fast-style-transfer). It trains a neural network on the style of any image you provide it and outputs a model you can use in [ml5.js](https://ml5js.org/) with the [ml5.styleTransfer()](https://ml5js.org/docs/StyleTransfer) method.
 
 **Notes**: 
-- **[Here](https://blog.paperspace.com/creating-your-own-style-transfer-mirror/)** is a blog post describing how to train your own custom style with [Paperspace](https://www.paperspace.com/). **This is the easiest way to get up and running without installing dependencies and libraries.**
-- **[Here](https://www.youtube.com/watch?v=gye9hSIrRWI)** is a video to help you get started with style transfer with [Spell](https://www.spell.run/)
 - You should train your network using a GPU. Just using CPU will result in training times of [several months](https://github.com/lengstrom/fast-style-transfer/issues/92) :calendar:
-- Training requires access to the [COCO Dataset](http://cocodataset.org/#home). COCO is a large-scale object detection, segmentation, and captioning dataset. The version of the dataset we will be using is about 14GB in total. The docker image will download and unzip it.
+- [Here]() is a blog post describing how to train your own custom style with [Paperspace](https://www.paperspace.com/). This is the easiest way to get up and running without installing dependencies and libraries.
 
 ## Requirements
 
 - Set up a python environment with tensorflow installed. [More detailed instructions here](https://ml5js.org/docs/training-setup). 
 
-- You can also use this Docker [container](https://hub.docker.com/r/cvalenzuelab/styletransfer/) that comes preinstalled with everything you need. Instructions are available below.
+- If you are familiar with Docker, you can use this [container](https://hub.docker.com/r/cvalenzuelab/styletransfer/) that comes preinstalled with everything you need.
 
 
 ## Usage
@@ -28,7 +26,7 @@ cd training_styletransfer
 
 ### 2) Install dependencies and get the training data
 
-This step is required only if you are running this **without** the Docker image. You will need to get the complete [COCO Dataset](http://cocodataset.org/#home), about 14GB of data. This is a requirement for training. You can download the data by running:
+If you are running this without the Docker image, you will need to get the complete [COCO Dataset](http://cocodataset.org/#home), about 14GB of data. This is a requirement for training. You can download the data by running:
 
 ```
 bash setup.sh
@@ -97,47 +95,3 @@ const style = new ml5.styleTransfer('./models/your_new_model');
 ```
 
 Check [ml5.js documentation](https://ml5js.org/docs/StyleTransfer) on the `styleTransfer()` method or the [style transfer simple example](https://ml5js.org/docs/style-transfer-image-example).
-
-
-## Docker
-
-First you should install the latest NVIDIA drivers and Docker installed.
-
-### 1) Install nvidia-docker
-
-
-Add the package repositories
-```
-curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | \
-  sudo apt-key add -
-distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
-curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | \
-  sudo tee /etc/apt/sources.list.d/nvidia-docker.list
-sudo apt-get update
-```
-
-Install nvidia-docker2 and reload the Docker daemon configuration
-```
-sudo apt-get install -y nvidia-docker2
-sudo pkill -SIGHUP dockerd
-```
-
-### 2) Pull the docker container
-
-```
-docker pull cvalenzuelab/styletransfer:latest
-```
-
-### 3) Run the container
-
-```
-sudo nvidia-docker run -e USER=$USER -e USERID=$UID -v $PWD:$PWD -w=$PWD -it -p 8888:8888 -p 6006:6006 -v ~/home/YourUserName/:/home cvalenzuelab/styletransfer bash
-```
-
-### 4) Run the scripts
-
-The latest command line should give you a linux prompt with access to your home folder. 
-
-You can now navigate to the folder you cloned this repo and follow the "Usage" instructions from step 3.
-
-Depending on your graphic card you may end up with an error mentionning something like 'ResourceExhaustedError', in this case you can try to decrease the batchsize option in the python command (to something like 16) : the training will only be a little longer.
